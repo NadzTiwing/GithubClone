@@ -1,0 +1,22 @@
+{
+  "name": "simple_enrollment_system",
+  "version": "1.0.0",
+  "description": "using Classes",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NadzTiwing/Simple_Enrollment_System.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NadzTiwing/Simple_Enrollment_System/issues"
+  },
+  "homepage": "https://github.com/NadzTiwing/Simple_Enrollment_System#readme",
+  "dependencies": {
+    "bootstrap": "^5.1.3"
+  }
+}
