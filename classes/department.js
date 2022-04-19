@@ -1,13 +1,13 @@
-class Department{
+class NewDepartment{
     
     constructor(initials, name){
-        const deptsStr = window.localStorage.getItem('departments');
         this.initials = initials;
         this.name = name;
         
         //check if it exists
         let departments=[];
-        let depts = JSON.parse(deptsStr);
+        let classDepts = new Departments();
+        let depts = classDepts.getAll();
         let isDuplicated = false;
         if(depts){
             for(let i=0; i<depts.length; i++){
@@ -19,7 +19,7 @@ class Department{
                 departments.push(data);
             }
         }
-        //insert new data
+        //insert new data and prevent insertion of duplicated names
         if(!isDuplicated){
             departments.push({
                 id:initials,
@@ -29,17 +29,22 @@ class Department{
         window.localStorage.setItem('departments', JSON.stringify(departments));
         
     }
-    // get name(){
-    //     return this._name;
-    // }
-    // set name(value){
-    //     this._name=value;
-    // }
-    getAllDepts(){
-        const deptsStr = window.localStorage.getItem('departments');
-        return JSON.parse(deptsStr);
-    }
     
+    
+    
+    
+}
+
+class Departments {
+    getAll(){
+        const deptsStr = window.localStorage.getItem('departments');
+        return JSON.parse(deptsStr) || [];
+    }
+
+    deleteAll(){
+        window.localStorage.clear();
+    }
+
     deleteDept(id){
         let deptsStr = window.localStorage.getItem('departments');
         let depts = JSON.parse(deptsStr);
@@ -48,11 +53,4 @@ class Department{
         window.localStorage.setItem('departments', JSON.stringify(newDepts));
         //window.localStorage.removeItem('name');
     }
-    deleteAll(){
-        window.localStorage.clear();
-    }
-    // addDept(){
-        
-    // }
-
 }

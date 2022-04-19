@@ -2,6 +2,11 @@
 <head>
     <title>Test</title>
     <link href="../node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet" ></style>
+    <style>
+        .hide{
+            display: none !important;
+        }
+    </style>
 </head>
 <body class="container mx-auto my-5">
     <h1 class="">Simple Enrollment System</h1>
@@ -15,6 +20,13 @@
         <div class="tab-content" id="v-pills-tabContent">
           <div class="tab-pane fade show active" id="v-pills-dept" role="tabpanel" aria-labelledby="v-pills-dept-tab">
               <h4>Departments</h4>
+              <label class="m-2"> New Department: </label>
+              
+              <div class="d-flex flex-col">
+                <input type="text" id="new-dept-id" class="form-control w-25" placeholder="initials">
+                <input type="text" id="new-dept" class="form-control" placeholder="Full Name of the Department">
+                <button class="btn btn-primary w-50" onclick="addDept()">ADD (+) </button>
+              </div>
               <table class="table table-hover">
                   <thead>
                     <tr>
@@ -39,35 +51,69 @@
     <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="classes/department.js"></script>
     <script>
-        let colleges = new Department("CAS","College of Arts and Sciences");
-        colleges = new Department("CN","College of Nursing");
-        let depts = colleges.getAllDepts();
-        //console.log(depts);
+        //display all departments
+        const depts = new Departments();
+        const colleges = depts.getAll();
         let deptTbl = document.querySelector("#dept-table");
+        let rowData = '';
+        for(let i=0; i<colleges.length; i++){
+            let deptId = colleges[i].id;
+            rowData+='<tr id="college-'+deptId+'">';
+            rowData+='<td id="'+deptId+'-text-id">'+deptId+'</td>';
+            rowData+='<td id="'+deptId+'-text-name">'+colleges[i].name+'</td>'; 
+            rowData+='<td> <button class="btn btn-primary" id="'+deptId+'-edit-btn" onclick="editDepartment(\''+deptId+'\')">Edit</button> <button class="btn btn-danger" id="'+deptId+'-delete-btn"  onclick="deleteDepartment(\''+deptId+'\');">Delete</button> <button class="btn btn-success hide"  id="'+deptId+'-save-btn" onclick="udpateDepartment(\''+deptId+'\');">save</button></td>';
+            rowData+='</tr>';
+        }
+        deptTbl.innerHTML +=rowData;
 
+        function clearInputs(){
+            let newDeptId = document.querySelector("#new-dept-id").value;
+            let newDept = document.querySelector("#new-dept").value;
+            newDeptId = "";
+            newDept="";
+        }
+        function addDept(){
+            let newDeptId = document.querySelector("#new-dept-id").value;
+            let newDept = document.querySelector("#new-dept").value;
+            if(newDept==="" || newDeptId ==="") return alert("insert the required fields");
+            let newCollege = new NewDepartment(newDeptId, newDept);
+
+            let newRow = '';
+            newRow+='<tr id="college-'+newDeptId+'">';
+            newRow+='<td id="'+newDeptId+'-text-id">'+newDeptId+'</td>';
+            newRow+='<td id="'+newDeptId+'-text-name">'+newDept+'</td>'; 
+            newRow+='<td> <button class="btn btn-primary"  id="'+newDeptId+'-edit-btn" onclick="editDepartment(\''+newDeptId+'\')">Edit</button> <button class="btn btn-danger"  id="'+newDeptId+'-delete-btn" onclick="deleteDepartment(\''+newDeptId+'\');">Delete</button> <button class="btn btn-success hide"  id="'+newDeptId+'-save-btn" onclick="udpateDepartment(\''+newDeptId+'\');">save</button></td>';
+            newRow+='</tr>';
+            deptTbl.innerHTML +=newRow;
+            clearInputs();
+        }
         function editDepartment(id){
+            let idCol = document.querySelector("#"+id+"-text-id");
+            let nameCol= document.querySelector("#"+id+"-text-name");
+            let editBtn = document.querySelector("#"+id+"-edit-btn");
+            let deleteBtn = document.querySelector("#"+id+"-delete-btn");
+            let saveBtn = document.querySelector("#"+id+"-save-btn");
+
+            editBtn.classList.add("hide");
+            deleteBtn.classList.add("hide");
+            saveBtn.classList.remove("hide");
 
         }
         function deleteDepartment(id){
-            colleges.deleteDept(id);
+            depts.deleteDept(id);
             let collegeRow = document.querySelector("#college-"+id);
             deptTbl.removeChild(collegeRow);
+        }
+
+        function udpateDepartment(id){
+
         }
 
         
        
         //console.log();
         
-        let rowData = '';
-        for(let i=0; i<depts.length; i++){
-            let deptId = depts[i].id;
-            rowData+='<tr id="college-'+deptId+'">';
-            rowData+='<td>'+deptId+'</td>';
-            rowData+='<td>'+depts[i].name+'</td>'; 
-            rowData+='<td> <button class="btn btn-primary" onclick="editDepartment('+depts[i].id+')">Edit</button> <button class="btn btn-danger" onclick="deleteDepartment(\''+deptId+'\');">Delete</button></td>';
-            rowData+='</tr>';
-        }
-        deptTbl.innerHTML +=rowData;
+        
         
         //Department.showDepts(); 
     </script>
