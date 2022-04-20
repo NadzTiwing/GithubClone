@@ -31,8 +31,6 @@ class NewDepartment{
     }
     
     
-    
-    
 }
 
 class Departments {
@@ -53,4 +51,15 @@ class Departments {
         window.localStorage.setItem('departments', JSON.stringify(newDepts));
         //window.localStorage.removeItem('name');
     }
+
+    updateDept(id, name){
+        let depts = this.getAll();
+        depts.map( dept =>{
+            if(dept.id === id) dept.name= name;
+            return dept;
+        })
+        window.localStorage.setItem('departments', JSON.stringify(depts));
+    }
 }
+
+// export default {NewDepartment, Departments};
