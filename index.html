@@ -9,46 +9,29 @@
     </style>
 </head>
 <body class="container mx-auto my-5">
-    <h1 class="">Simple Enrollment System</h1>
-    <div class="d-flex align-items-start">
-        <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-          <button class="nav-link active" id="v-pills-dept-tab" data-bs-toggle="pill" data-bs-target="#v-pills-dept" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">Manage Department</button>
-          <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-teachers" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">Manage Teachers</button>
-          <button class="nav-link" id="v-pills-students-tab" data-bs-toggle="pill" data-bs-target="#v-pills-students" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">Enroll Students</button>
-          
+    <h1 class="">Simple Department Management</h1>
+    <div class="mx-auto">
+        <label class="m-2"> New Department: </label>
+        
+        <div class="d-flex flex-col">
+        <input type="text" id="new-dept-id" class="form-control w-25" placeholder="initials">
+        <input type="text" id="new-dept" class="form-control" placeholder="Full Name of the Department">
+        <button class="btn btn-primary w-25" id="add-btn" onclick="addDept()">ADD (+) </button>
+        <button class="btn btn-success w-25 hide"  id="save-btn" onclick="udpateDepartment()">save</button>
         </div>
-        <div class="tab-content" id="v-pills-tabContent">
-          <div class="tab-pane fade show active" id="v-pills-dept" role="tabpanel" aria-labelledby="v-pills-dept-tab">
-              <h4>Departments</h4>
-              <label class="m-2"> New Department: </label>
-              
-              <div class="d-flex flex-col">
-                <input type="text" id="new-dept-id" class="form-control w-25" placeholder="initials">
-                <input type="text" id="new-dept" class="form-control" placeholder="Full Name of the Department">
-                <button class="btn btn-primary w-50" id="add-btn" onclick="addDept()">ADD (+) </button>
-                <button class="btn btn-success hide"  id="save-btn" onclick="udpateDepartment()">save</button>
-              </div>
-              <table class="table table-hover">
-                  <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Name</th>
-                        <th>Options</th>
-                    </tr>
-                  </thead>
-                  <tbody id="dept-table">
-                    
-                  </tbody>
-              </table>
-          </div>
-          <div class="tab-pane fade" id="v-pills-teachers" role="tabpanel" aria-labelledby="v-pills-teachers-tab">
-              teachers
-          </div>
-          <div class="tab-pane fade" id="v-pills-students" role="tabpanel" aria-labelledby="v-pills-students-tab">
-              students
-          </div>
-        </div>
-      </div>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Options</th>
+            </tr>
+            </thead>
+            <tbody id="dept-table">
+            
+            </tbody>
+        </table>
+    </div>
     <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="./classes/department.js"></script>
     <script src="./classes/utils.js"></script>
