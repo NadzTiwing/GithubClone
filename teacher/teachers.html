@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<head>
+    <title>Test</title>
+    <link href="../node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet" ></style>
+    <style>
+        .hide{
+            display: none !important;
+        }
+    </style>
+</head>
+<body class="container mx-auto my-5">
+    <h1 class="">Simple Enrollment System</h1>
+    <div class="mx-auto row">
+        <div class="col-3">
+            <ul class="nav nav-pills nav-fill flex-column my-5">
+                <li class="nav-item">
+                  <a class="nav-link text-muted" href="../index.html">Manage Department</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link  active" href="#" aria-current="page" >Manage Teachers</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link text-muted" href="../student/students.html">Enroll Student</a>
+                </li>
+            </ul>       
+        </div>
+        <div class="col">
+            <h4>Manage Teachers</h4>
+            <div class="d-flex flex-col justify-content-between">
+                <label class="m-2"> Teachers: </label>
+                <div class="align-self-end">
+                    <button class="btn btn-danger " id="add-btn" onclick="deleteAll()">DELETE ALL </button>
+                    <button class="btn btn-success mx-1" id="add-btn" onclick="addTeacher()">ADD TEACHER </button>
+                </div>
+            </div>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Department</th>
+                    <th>Subjects Handling</th>
+                    <th>Options</th>
+                </tr>
+                </thead>
+                <tbody id="teachers-table">
+                
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="../classes/teachers.js"></script>
+    <script src="../classes/utils.js"></script>
+    <script>
+        const teachersTbl = document.querySelector("#teachers-table");
+
+        const teachers = new Teachers();
+        displayTeachers();
+        
+        function displayTeachers(){
+            const profs = teachers.getAll();
+            console.log(profs);
+            let row='';
+            for(let i=0; i<profs.length; i++){
+                let profId = profs[i].id;
+                row+='<tr id="'+profId+'-teacher-id">'+profId+'</tr>';
+                row+='<tr id="'+profId+'-teacher-name">'+profs[i].name+'</tr>';
+                // row+='<tr id="'+profId+'-teacher-subjects">'+profId+'</tr>';
+                // row+='<tr id="'+profId+'-options">'+profId+'</tr>';
+            }
+
+        }
+
+        function addTeacher(){
+            window.location.href="new_teacher.html";
+        }
+        function deleteAll(){
+            if(confirm("Are you sure you want to remove all teachers?")){
+                teachers.deleteAll();
+            }
+        }
+
+    </script>
+</body>
+</html>

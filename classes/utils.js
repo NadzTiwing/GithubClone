@@ -16,5 +16,11 @@ class Utils{
         let el = document.querySelector("#"+elementName);
         return el.removeAttribute("disabled");
     }
+
+    generateRandomId(){
+        return Math.floor((1 + Math.random()) * 0x10000)
+        .toString(16)
+        .substring(1);
+    }
 }
 
