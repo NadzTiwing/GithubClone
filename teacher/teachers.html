@@ -64,12 +64,20 @@
             let row='';
             for(let i=0; i<profs.length; i++){
                 let profId = profs[i].id;
-                row+='<tr id="'+profId+'-teacher-id">'+profId+'</tr>';
-                row+='<tr id="'+profId+'-teacher-name">'+profs[i].name+'</tr>';
-                // row+='<tr id="'+profId+'-teacher-subjects">'+profId+'</tr>';
-                // row+='<tr id="'+profId+'-options">'+profId+'</tr>';
-            }
+                let subjectsList = "";
+                for(let index=0; index<profs[i].subjects.length; index++){
+                    subjectsList += `<span>${profs[i].subjects[index].name}</span><br/>`;
+                }
 
+                row+='<tr>';
+                row+='<td id="'+profId+'-teacher-id">'+profId+'</td>';
+                row+='<td id="'+profId+'-teacher-name">'+profs[i].name+'</tdtd>';
+                row+='<td id="'+profId+'-teacher-department">'+profs[i].department+'</td>';
+                row+='<td id="'+profId+'-teacher-subjects">'+subjectsList+'</td>';
+                row+='<td id="'+profId+'-options"><button class="btn btn-small btn-warning" onclick="viewEdit(\''+profId+'\')">view more</button></td>';
+                row+='<tr>';
+            }
+            teachersTbl.innerHTML= row;
         }
 
         function addTeacher(){
@@ -79,6 +87,9 @@
             if(confirm("Are you sure you want to remove all teachers?")){
                 teachers.deleteAll();
             }
+        }
+        function viewEdit(id){
+            window.location.href="edit_teacher.html?id="+id;
         }
 
     </script>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<head>
+    <title>Test</title>
+    <link href="../node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet" ></style>
+    <style>
+        .hide{
+            display: none !important;
+        }
+    </style>
+</head>
+<body class="container mx-auto my-5">
+    <h1 class="">Simple Enrollment System</h1>
+    <div class="mx-auto row">
+        <div class="col-3">
+            <ul class="nav nav-pills nav-fill flex-column my-5">
+                <li class="nav-item">
+                  <a class="nav-link disabled" href="#">Manage Department</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link  active disabled" href="#" aria-current="page" tabindex="-1" aria-disabled="true" >Manage Teachers</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Enroll Student</a>
+                </li>
+            </ul>       
+        </div>
+        <div class="col">
+            
+            <div class="d-flex flex-col justify-content-between mb-2">
+                <h4>Manage Teacher</h4>
+                <div class="align-self-end">
+                    <button class="btn btn-success" id="save-btn" onclick="save()">SAVE CHANGES</button>
+                    <button class="btn btn-secondary" id="cancel-btn" onclick="cancel()">CANCEL</button>
+                </div>
+            </div>
+            <div class="d-flex flex-col justify-content-between mb-2">
+                <label for="" class="my-1">Name:</label>
+                <input type="text" class="form-control mx-2" id="teacher-name" value="" />
+                <label for="" class="my-1">Department:</label>
+                <select name="department-selection" id="department-selection" class="form-control mx-2"></select>
+            </div>
+            <div class="d-flex flex-col mb-1">
+                <p class="my-1">Insert Subject:</p>
+                <input type="text" class="form-control w-50 mx-3" id="new-subject-name" value="" placeholder="Subject" />
+            </div>
+            <span class="text-danger"><small>*warning: time format is 24-hours and time ranges in 6(am) to 20 (8pm)</small></span>
+            <div class="d-flex flex-col justify-content-between mb-4">
+                <label for="" class="my-1">Schedule: </label>
+                <select name="days-schedule-selection" id="days-schedule-selection" class="form-control mx-1 ">
+                    <option value="mwf">Monday, Wednesday & Friday</option>
+                    <option value="tth">Tuesday & Thursday</option>
+                </select>
+                <input type="number" min="6" max="20" value="6" placeholder="starts at" id="start-time" class="form-control w-25"/> 
+                <span class="my-1"><strong>-</strong></span> 
+                <input type="number" min="6" max="20"  value="7" placeholder="ends at" id="end-time" class="form-control w-25"/> 
+                <button class="btn btn-success" id="save-btn" onclick="insertSubject()">(+)</button>
+            </div>
+            <p><strong>Subjects:</strong></p>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>id</th>
+                    <th>Name</th>
+                    <th>Days</th>
+                    <th>Schedule</th>
+                    <th>Options</th>
+                </tr>
+                </thead>
+                <tbody id="subjects-table">
+                
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="../classes/department.js"></script>
+    <script src="../classes/subjects.js"></script>
+    <script src="../classes/utils.js"></script>
+    <script src="../classes/teachers.js"></script>
+    <script>
+
+        var url = window.location.href;
+        profId = new URL(url).searchParams.get("id");
+        
+        const teacherName = document.querySelector("#teacher-name");
+        const newSubject = document.querySelector("#new-subject-name");
+        const selectedDays = document.querySelector("#days-schedule-selection");
+        const startTime = document.querySelector("#start-time");
+        const endTime = document.querySelector("#end-time");
+        const subjectsTbl = document.querySelector("#subjects-table");
+        
+        let subjects=[];
+          
+
+        const departments = new Departments();
+        const depts = departments.getAll();
+        const teachers = new Teachers();
+        const instructor = teachers.getTeacher(profId);
+        teacherName.value = instructor.name; 
+
+        const utils = new Utils();
+
+        const teacherIndex = "teachers.html";
+
+        //display departments in departments selection
+        const deptSelection = document.querySelector("#department-selection"); 
+        for(let i=0; i<depts.length; i++){
+            deptSelection.appendChild(createOptionItem(depts[i].id, depts[i].name));
+        } 
+
+        function createOptionItem(id, deptName){
+            let option = document.createElement('option');
+            option.setAttribute("value", deptName);
+            option.textContent = deptName;
+            return option;
+        }
+
+        function cancel(){
+            window.location.href=teacherIndex;
+        }
+
+        function clearSubjectInputs(){
+            newSubject.value = "";
+        }
+
+        /** 
+         * @TODO: insert subjects to the table
+         * do all the crud functionalities
+        */
+
+        /*function displaySubjects(){
+            let rows='';
+            for(let i=0; i<subjects.length; i++){
+                let id = subjects[i].id;
+                let days = subjects[i].days === "mwf"? "Mon, Wed & Fri" : "Tue & Thurs"
+                rows+='<tr>';
+                rows+='<td id="'+id+'-subject-id">'+id+'</td>'; 
+                rows+='<td id="'+id+'-subject-name">'+subjects[i].name+'</td>';
+                rows+='<td id="'+id+'-subject-days">'+days+'</td>';
+                rows+='<td id="'+id+'-subject-names">'+subjects[i].time.start +' - '+subjects[i].time.end+'</td>';
+                rows+='<td><button class="btn btn-sm btn-danger" onclick="deleteSubject(\''+id+'\')">remove</button></td>';
+                rows+='</tr>';
+            }
+            subjectsTbl.innerHTML = rows;
+        }
+
+        function insertSubject(){
+            let name = newSubject.value;
+            let daySchedule = selectedDays.value;
+            let start = startTime.value;
+            let end = endTime.value;
+            if(!checkTime(start, end)) return alert("Incorrect inputs in time schedule");
+            else if(name === "" || daySchedule==="") return alert("Fill up all the required fields");
+
+            let obj={
+                id: utils.generateRandomId(),
+                name: name,
+                days: daySchedule,
+                time: { start: start+":00", end:end+":00"},
+            };
+            subjects.push(obj);
+            clearSubjectInputs();
+            displaySubjects();
+        }
+
+        function checkTime(start, end){
+            if(start > end) return false;
+            else if(start <= -1 || end <= -1) return false;
+            else if(start < 6 || start > 20) return false;
+            else if(end < 6 || end > 20) return false;
+            else return true;
+        }
+
+        function deleteSubject(id){
+            let newData = subjects.filter(item => item.id !== id);
+            subjects = newData;
+            subjectsTbl.innerHTML="";
+            displaySubjects();
+        }
+
+        function save(){
+            let name = teacherName.value;
+            let dept = deptSelection.value;
+            if(name === "") return alert("Enter teacher's name ");
+            else if(!dept || dept==="") return alert("Select a department");
+            else if(subjects.length == 0) return alert("Insert atleast one subject");
+
+            let teacherId = utils.generateRandomId();
+            const newTeacher = new NewTeacher(teacherId, name, dept, subjects);
+            window.location.href=teacherIndex;
+        }*/
+
+
+    </script>
+</body>
+</html>
