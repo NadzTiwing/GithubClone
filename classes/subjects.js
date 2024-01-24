@@ -8,7 +8,7 @@ class NewSubject {
 
 class Subjects {
   getAll() {
-    const teachers = window.localStorage.getItem("teachers");
-    return JSON.parse(teachers) || [];
+    const subjects = window.localStorage.getItem("subjects");
+    return JSON.parse(subjects) || [];
   }
 }
