@@ -1,5 +1,7 @@
 class NewTeacher {
   constructor(id, name, department, subjects) {
+    console.log("This is a test");
+    
     this.id = id;
     this.name = name;
     this.department = department;
